@@ -7,15 +7,11 @@ from models import JokeResponse
 
 router = APIRouter()
 
-_cache = {"data": None, "timestamp": 0}
+__joke_cache = {}
 CASHE_DURATION = 30 # seconds
 
 @router.get("/joke", response_model=JokeResponse)
 async def get_joke():
-
-    now = time.time()
-    if _cache["data"] and now - _cache["timestamp"] < CASHE_DURATION:
-        return _cache["data"]
 
     url = "https://official-joke-api.appspot.com/random_joke"
     async with httpx.AsyncClient() as client:
@@ -26,8 +22,15 @@ async def get_joke():
             raise HTTPException(status_code=502, detail="Failed to fetch joke from API")
         
     data = res.json()
-    joke = JokeResponse(setup=data.get("setup"), punchline=data.get("punchline"))
-    _cache["data"] = JokeResponse(setup=data.get("setup"), punchline=data.get("punchline"))
-    _cache["timestamp"] = now
+    joke_id = data.get("id")
+    now = time.time()
 
+    if joke_id in __joke_cache:
+        joke, timestamp = __joke_cache[joke_id]
+        if now - timestamp < CASHE_DURATION:
+            return joke
+
+    joke = JokeResponse(setup=data.get("setup"), punchline=data.get("punchline"))
+    __joke_cache[joke_id] = (joke, now)
     return joke
+
