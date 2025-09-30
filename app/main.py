@@ -1,11 +1,14 @@
 
 import os
-from fastapi import FastAPI, HTTPException
+
+from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import httpx
+from routes import router
 
 app = FastAPI()
+
+app.include_router(router)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "..", "static")
@@ -20,20 +23,3 @@ async def serve_front():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
-
-@app.get("/joke")
-async def get_joke():
-
-    url = "https://official-joke-api.appspot.com/random_joke"
-    async with httpx.AsyncClient() as client:
-        try:
-            res = await client.get(url)
-            res.raise_for_status()
-        except httpx.HTTPError:
-            raise HTTPException(status_code=502, detail="Failed to fetch joke from API")
-        
-    data = res.json()
-    return {
-        "setup": data.get("setup"),
-        "punchline": data.get("punchline")
-    }

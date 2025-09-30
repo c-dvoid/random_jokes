@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     const jokeDiv = document.getElementById("joke");
-    let state = 0; // 0 - ожидание, 1 - setup, 2 - punchline
+    let state = 0; 
     let currentSetup = "";
     let currentPunchline = "";
 
@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // начальное состояние
     jokeDiv.textContent = "Start the joke, vro..";
     state = 0;
 });
