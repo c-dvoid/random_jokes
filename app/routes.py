@@ -1,17 +1,20 @@
 
-import time
-
 from fastapi import APIRouter, HTTPException
 import httpx
-from models import JokeResponse
+import json
+from fastapi_cache import FastAPICache
+from fastapi_cache.decorator import cache
+
+from .models import JokeResponse
 
 router = APIRouter()
 
-__joke_cache = {}
-CASHE_DURATION = 30 # seconds
+joke_cnt = 1
 
 @router.get("/joke", response_model=JokeResponse)
 async def get_joke():
+
+    global joke_cnt
 
     url = "https://official-joke-api.appspot.com/random_joke"
     async with httpx.AsyncClient() as client:
@@ -22,15 +25,21 @@ async def get_joke():
             raise HTTPException(status_code=502, detail="Failed to fetch joke from API")
         
     data = res.json()
-    joke_id = data.get("id")
-    now = time.time()
+    joke_id = joke_cnt
+    joke_cnt += 1
 
-    if joke_id in __joke_cache:
-        joke, timestamp = __joke_cache[joke_id]
-        if now - timestamp < CASHE_DURATION:
-            return joke
-
-    joke = JokeResponse(setup=data.get("setup"), punchline=data.get("punchline"))
-    __joke_cache[joke_id] = (joke, now)
+    joke = JokeResponse(
+        id=joke_id,
+        setup=data.get("setup"),
+        punchline=data.get("punchline")
+        )
+    
+    cache_backend = FastAPICache.get_backend()
+    await cache_backend.set(
+        f"joke:{joke_id}",
+        json.dumps(joke.dict()).encode("utf-8"),
+        expire=30
+    )
+    
     return joke
 
