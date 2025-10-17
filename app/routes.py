@@ -3,7 +3,6 @@ from fastapi import APIRouter, HTTPException
 import httpx
 import json
 from fastapi_cache import FastAPICache
-from fastapi_cache.decorator import cache
 
 from .models import JokeResponse
 
