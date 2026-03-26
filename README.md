@@ -7,12 +7,11 @@ Just an api that allows you generate random jokes, using FastAPI and vanilla JS.
 
 - Python 3.11+
 - FastAPI
-- HTML, CSS, JS
+
 
 ## Project structure
 
 app/ # FastAPI server
-static/ # HTML, CSS, JS
 requirements.txt
 
 ## Installation
