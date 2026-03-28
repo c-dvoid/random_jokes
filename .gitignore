@@ -39,6 +39,9 @@ venv/
 # Python cache
 __pycache__/
 
+# Testing
+.pytest_cache/
+
 # =====================================
 # Database
 # =====================================

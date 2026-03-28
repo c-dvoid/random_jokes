@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jokes.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0e0d;
+      --paper: #f5f0e8;
+      --accent: #c8452a;
+      --muted: #9a9189;
+    }
+    .font-serif  { font-family: 'Instrument Serif', serif; }
+    .font-mono   { font-family: 'DM Mono', monospace; }
+    .fade-out    { opacity: 0; }
+    .text-ink    { color: var(--ink); }
+    .text-muted  { color: var(--muted); }
+    .text-accent { color: var(--accent); }
+    .bg-paper    { background-color: var(--paper); }
+    .border-ink  { border-color: var(--ink); }
+    .hover-ink:hover { background-color: var(--ink); color: var(--paper); }
+  </style>
+</head>
+<body class="bg-paper font-mono text-ink min-h-screen flex flex-col items-center justify-center p-8">
+
+  <div class="w-full max-w-xl">
+
+    <div class="mb-12">
+      <p class="font-mono text-xs tracking-widest uppercase text-muted">jokes.</p>
+    </div>
+
+    <div id="joke-block">
+      <p class="font-mono text-xs tracking-widest uppercase text-muted mb-2">setup</p>
+      <p id="setup" class="font-serif text-4xl font-bold leading-snug text-ink min-h-[3em] transition-opacity duration-300">
+        press the button.
+      </p>
+
+      <div class="w-full h-px bg-ink opacity-10 my-8"></div>
+
+      <p class="font-mono text-xs tracking-widest uppercase text-muted mb-2">punchline</p>
+      <p id="punchline" class="font-serif text-3xl font-bold italic leading-snug text-accent min-h-[2.5em] transition-opacity duration-300">
+        —
+      </p>
+    </div>
+
+    <div class="mt-12 flex items-center gap-6">
+      <button
+        id="btn"
+        onclick="loadJoke()"
+        class="hover-ink font-mono text-xs tracking-widest uppercase text-ink border border-ink px-8 py-3 cursor-pointer transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        next joke
+      </button>
+      <p id="error" class="font-mono text-xs text-accent tracking-wide hidden"></p>
+    </div>
+
+  </div>
+
+  <p class="fixed bottom-8 font-mono text-xs tracking-widest uppercase text-muted">random jokes api</p>
+
+  <script>
+    const setup     = document.getElementById("setup");
+    const punchline = document.getElementById("punchline");
+    const btn       = document.getElementById("btn");
+    const error     = document.getElementById("error");
+
+    async function loadJoke() {
+      btn.disabled = true;
+      error.classList.add("hidden");
+
+      setup.classList.add("fade-out");
+      punchline.classList.add("fade-out");
+
+      await new Promise(r => setTimeout(r, 300));
+
+      try {
+        const res = await fetch("/api/joke");
+        if (!res.ok) throw new Error(`${res.status}`);
+        const data = await res.json();
+
+        setup.textContent     = data.setup;
+        punchline.textContent = data.punchline;
+      } catch (err) {
+        error.classList.remove("hidden");
+        error.textContent     = `error — ${err.message}`;
+        setup.textContent     = "something went wrong.";
+        punchline.textContent = "—";
+      }
+
+      setup.classList.remove("fade-out");
+      punchline.classList.remove("fade-out");
+      btn.disabled = false;
+    }
+  </script>
+</body>
+</html>

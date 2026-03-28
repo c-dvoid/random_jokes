@@ -1,47 +1,69 @@
+# Random Jokes API
 
-# Random jokes api
+Простой сервис для генерации случайных шуток.  
+Фронтенд подключён через Nginx (обслуживание статики и проксирование API).
 
-Just an api that allows you generate random jokes, using FastAPI and vanilla JS.  
+---
 
-## Technologies used
+## Функционал
+
+- Получение случайной шутки (GET `/joke`)
+
+---
+
+## Технологии
 
 - Python 3.11+
 - FastAPI
+- Vanilla JS + Tailwind CSS
+- Docker и Docker Compose
+- Nginx (для фронтенда и проксирования API)
 
+---
 
-## Project structure
+## Запуск через Docker (рекомендуется)
 
-app/ # FastAPI server
-requirements.txt
-
-## Installation
-
-1. Clone the repository:
+1. Клонируем репозиторий:
 
 ```bash
 git clone https://github.com/c-dvoid/random_jokes.git
+cd random_jokes
 ```
-======================================================
 
-2. Create a virtual environment and install the requirements:
+2. Запускаем через Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+Приложение будет доступно на `http://localhost`
+
+---
+
+## Локальный запуск (для разработки)
+
+1. Клонируем репозиторий:
+
+```bash
+git clone https://github.com/c-dvoid/random_jokes.git
+cd random_jokes
+```
+
+2. Создаём виртуальное окружение и устанавливаем зависимости:
 
 ```bash
 python -m venv venv
-# Linux/macOS
+# Linux / macOS
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
-
 pip install -r requirements.txt
 ```
-==============================================================
 
-3. Launch the server:
+3. Запускаем сервер:
 
 ```bash
 uvicorn app.main:app --reload
 ```
-==================================
 
-## Funcionality
-- Generating random jokes that could boost your mood!
+Приложение будет доступно на `http://localhost:8000`
