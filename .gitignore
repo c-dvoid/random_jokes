@@ -1,5 +1,51 @@
-__pycache__/
-*.pyc
-*.db
+# =====================================
+# Frontend (Node/Vite)
+# =====================================
+/frontend/logs
+/frontend/*.log
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/pnpm-debug.log*
+/frontend/lerna-debug.log*
+
+/frontend/node_modules
+/frontend/dist
+/frontend/dist-ssr
+/frontend/*.local
+
+# Editor directories and files (Frontend + Backend)
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# =====================================
+# Python / Backend
+# =====================================
+# Virtual environment
 venv/
+.venv/
+
+# Environment
 .env
+.env.local
+
+# Python cache
+__pycache__/
+
+# Testing
+.pytest_cache/
+
+# =====================================
+# Database
+# =====================================
+*.db
+*.sqlite
+*.sqlite3
+*.sqlitedb

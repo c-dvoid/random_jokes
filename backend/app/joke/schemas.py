@@ -1,7 +1,6 @@
 
 from pydantic import BaseModel
 
-class JokeResponse(BaseModel):
-    id: int
+class Joke(BaseModel):
     setup: str
     punchline: str
