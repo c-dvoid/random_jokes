@@ -78,6 +78,13 @@
 
       try {
         const res = await fetch("/api/joke");
+        if (res.status === 429) {
+          const data = await res.json();
+          error.classList.remove("hidden")
+          error.textContent = data.detail
+          btn.disabled = false
+          return;
+        }
         if (!res.ok) throw new Error(`${res.status}`);
         const data = await res.json();
 
