@@ -8,6 +8,7 @@
 ## Функционал
 
 - Получение случайной шутки (GET `/joke`)
+- Rate limiting — ограничение количества запросов с одного IP
 
 ---
 
@@ -15,6 +16,7 @@
 
 - Python 3.11+
 - FastAPI
+- Redis (rate limiting)
 - Vanilla JS + Tailwind CSS
 - Docker и Docker Compose
 - Nginx (для фронтенда и проксирования API)
